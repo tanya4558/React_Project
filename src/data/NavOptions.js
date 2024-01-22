@@ -57,9 +57,5 @@ export const NavOptionsData = [
     {
         optionName : 'About',
         url : "/about"
-    },
-    {
-        optionName : 'Login',
-        url : "/login"
-    } 
+    }
 ] 

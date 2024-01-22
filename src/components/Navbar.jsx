@@ -2,15 +2,22 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import Link from 'next/link';
- 
+import LoginModal from "@/components/login/LoginModal";
+import { UserDetails } from "@/data/UserDetails";
+
 const Navbar = () => {
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
- 
+    const [userDetails, setUserDetails] = useState(new UserDetails);
+    const [modalOpen, setModalOpen] = useState(false);
+
+
+    const handleModalOpen = () => {
+        return setModalOpen(!modalOpen);
+    };
     const handleLogout = () => {
-        // Implement logout logic
         setIsLoggedIn(false);
-        setUsername('');
+        setUserDetails();
     };
  
     return (
@@ -22,23 +29,44 @@ const Navbar = () => {
                 <div style={{ textWrap: "balance" }} className="text-xl font-medium text-center">
                     Ganga Flood Early Warning System & Inundation Forecast
                 </div>
-                <div className="text-sm font-extralight flex items-center">
+
+
+                { <div className="text-sm flex items-center">
                     {isLoggedIn ? (
                         <>
-                            <p className="mr-2">{`Welcome, ${username}!`}</p>
-                            <button onClick={handleLogout} className="hover:text-white-800/80 transition-all duration-200">
-                                Logout
-                            </button>
+                            <p className="mr-2">{`Welcome, ${userDetails.userName}!`}</p>
                         </>
-                    ) : (
-                        <Link href="/contact-us">
-                            <div className="hover:text-white-800/80 transition-all duration-200">Contact Us</div>
-                        </Link>
-                    )}
-                </div>
+                    ) : (<></>) }
+                </div> }
+
+                <ul className="navbar-nav align-items-right">
+                    {
+                        isLoggedIn ? (<li className="nav-item ml-5">
+                        <a className="hover:text-white-800/80 transition-all duration-200" onClick={handleLogout}>
+                        Logout
+                        </a>
+                    </li>) : (<li className="nav-item ml-5">
+                        <a className="hover:text-white-800/80 transition-all duration-200" onClick={handleModalOpen}>
+                            Login
+                        </a>
+                    </li>)
+                    }
+                    
+                    <li className="nav-item ml-5">
+                        <a href="/contact-us" className="hover:text-white-800/80 transition-all duration-200">
+                            Contact Us
+                        </a>
+                    </li>
+                </ul>
             </nav>
-        </div>
-    );
+            { <LoginModal
+           modalOpen={modalOpen}
+           handleModalOpen={handleModalOpen}
+           setuserData={setUserDetails}
+           setLoggedIn={setIsLoggedIn}
+            /> }
+            </div>
+        )
 };
  
 export default Navbar;
