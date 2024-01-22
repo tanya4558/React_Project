@@ -82,12 +82,12 @@ export default function ContentBar({
         height="650"
         loading="lazy"
       ></iframe> */}
- 
-      <div lassName="map-container" style={{ position: 'relative', zIndex: 0 }}>
+
+      {/* <div className="map-container" style={{ position: 'relative', zIndex: 0 }}>
       { <Map/> }
 
-      </div>
-
+      </div> */}
+      <Map/>
       {/* Minimize Left Panel */}
       <div className="minimize-panel"
         title={leftBarStatus ? "Collapse" : "Expand"}

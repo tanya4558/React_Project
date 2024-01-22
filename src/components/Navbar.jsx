@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="bg-primaryBlue text-white-800 py-2 flex items-center">
             <nav className="container mx-auto flex flex-row justify-between items-center">
                 <div>
-                    <Image src="/dummyLogo.avif" width={70} height={70} className="rounded-full" />
+                    <Image src="/dummyLogo.avif" width={70} height={70} className="rounded-full" alt=''/>
                 </div>
                 <div style={{ textWrap: "balance" }} className="text-xl font-medium text-center">
                     Ganga Flood Early Warning System & Inundation Forecast

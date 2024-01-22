@@ -13,7 +13,7 @@ export default function RightBar({ rightBarStatus }) {
   const [floodAlertData, setFloodAlertData] = useState([]);
   const fetchFloodAlertData = async () => {
     try {
-      const response = await fetch("your-api-endpoint");
+      //const response = await fetch("your-api-endpoint");
       const data =  [
         {
             title : "Damodar",

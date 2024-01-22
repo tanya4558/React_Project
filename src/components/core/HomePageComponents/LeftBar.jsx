@@ -38,7 +38,7 @@ export default function LeftBar({ leftBarStatus }) {
   useEffect(() => {
     const fetchTabDataFromApi = async () => {
       try {
-        const response = await fetch("your-api-endpoint");
+        //const response = await fetch("your-api-endpoint");
         const data = [
           {
             "tabName": "Forecast",
@@ -93,7 +93,7 @@ export default function LeftBar({ leftBarStatus }) {
 
       {/* Accordion */}
       <div className="pl-8 pt-3 text-sm">
-      <Accordion type="multiple" collapsible className="text-black/80">
+      <Accordion type="multiple"  className="text-black/80 collapsible" >
           {tabData.map((tab, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
               <AccordionTrigger className="font-semibold" onClick={() => openModal(tab.title, componentMap[tab.component])}>{tab.tabName}</AccordionTrigger>
