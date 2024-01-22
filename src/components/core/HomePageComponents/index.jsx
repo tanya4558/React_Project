@@ -1,6 +1,9 @@
 "use client";
 import { ChevronLeft, ChevronRight, ChevronRightCircle } from "lucide-react";
 import React from "react";
+import ReactDOM from "react-dom";
+import Map from "@/components/map/map";
+
 import {
   Table,
   TableBody,
@@ -11,9 +14,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import Leaflet from "leaflet"
+import L from "leaflet"
 import "leaflet/dist/leaflet.css" 
-import { MapContainer, TileLayer, useMap, Marker, Popup} from "react-leaflet";
+//import forecastingLocations from '@/data/forecastingLocations.json'
+
 //import { ShapeFile } from 'ShapeFile';
 export default function ContentBar({
   setLeftBarOpen,
@@ -27,6 +31,38 @@ export default function ContentBar({
     xlsx.utils.book_append_sheet(wb, ws, "Sheet 1");
     xlsx.writeFile(wb, "grid-data.xlsx");
   };
+
+  // const forecastingStationStyle = (feature) => {
+  //   let mapStyle = {
+  //       fillColor: getColor(feature.properties[dataScope.key]),
+  //         weight: 1,
+  //         opacity: 1,
+  //         color: '#888',
+  //         dashArray: '3',
+  //         fillOpacity: 0.7
+  //   };
+  
+  //   // if (hoveredCountry && feature.properties.iso_a3 === hoveredCountry.iso_a3) {
+  //   //           mapStyle.color = '#444';
+  //   //           mapStyle.weight = 2;
+  //   // }
+  
+  //   return mapStyle;
+  // };
+
+  // const onEachForecastingStation = (feature, layer) => {
+  //   layer.on({
+  //         click: () => setSelectedStation(feature.properties)
+  //   });
+  // };
+
+  // const setSelectedStation = (prop) => {
+
+
+
+  // };
+
+
  
   return (
     <div
@@ -48,20 +84,8 @@ export default function ContentBar({
       ></iframe> */}
  
       <div lassName="map-container" style={{ position: 'relative', zIndex: 0 }}>
-      <MapContainer
-          center={[28.619181, 77.314201]}
-          zoom={13}
-          scrollWheelZoom={false}
-          style={{ flex: 1, width: '100%', height: '300px' }}
-        >
-         
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={[28.619181, 77.314201]}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>*
-        </MapContainer>
+      { <Map/> }
+
       </div>
 
       {/* Minimize Left Panel */}
