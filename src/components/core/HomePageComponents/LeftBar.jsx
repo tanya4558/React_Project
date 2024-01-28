@@ -34,7 +34,7 @@ const componentMap = {
 };
 export default function LeftBar({ leftBarStatus }) {
   const [tabData, setTabData] = useState([]);
- 
+
   useEffect(() => {
     const fetchTabDataFromApi = async () => {
       try {
@@ -44,29 +44,29 @@ export default function LeftBar({ leftBarStatus }) {
             "tabName": "Forecast",
             "options": [
               { "title": "Option 1", "component": <StackedBarChart /> },
-              { "title": "Option 2", "component": <VerticalBarChart /> },
-              { "title": "Option 3", "component": <DonutChart /> }
+              { "title": "Option 2", "component": <StackedBarChart /> },
+              { "title": "Option 3", "component": <StackedBarChart /> }
             ]
           },
           {
             "tabName": "Observed Sites",
             "options": [
-              { "title": "Option 1", "component": <PolarAreaChart /> },
-              { "title": "Option 2", "component": <RadarChart /> },
-              { "title": "Option 3", "component": <ChatEvent /> }
+              { "title": "Option 1", "component": <StackedBarChart /> },
+              { "title": "Option 2", "component": <StackedBarChart /> },
+              { "title": "Option 3", "component": <StackedBarChart /> }
             ]
           }
         ]
-        
+
         setTabData(data);
       } catch (error) {
         console.error("Error fetching tab data:", error);
       }
     };
- 
+
     fetchTabDataFromApi();
   }, []);
- 
+
   const openModal = (title, component) => {
     console.log(`Open modal for ${title}`);
     // Implement your modal logic using the selected component
@@ -74,9 +74,8 @@ export default function LeftBar({ leftBarStatus }) {
 
   return (
     <div
-      className={`${
-        leftBarStatus ? "w-[300px]" : "hidden w-0"
-      } transition-all duration-200  bg-white-100/50 h-[calc(100vh-134px)] z-10 p-4 overflow-y-auto overflow-x-hidden relative shadow-[5px_10px_5px] shadow-[#12121210]`}
+      className={`${leftBarStatus ? "w-[300px]" : "hidden w-0"
+        } transition-all duration-200  bg-white-100/50 h-[calc(100vh-134px)] z-10 p-4 overflow-y-auto overflow-x-hidden relative shadow-[5px_10px_5px] shadow-[#12121210]`}
     >
       {/* Search Bar */}
       <div className="border border-primaryBlue/10 rounded h-8  flex p-3 py-4 text-sm items-center gap-2 text-[#12121270]">
@@ -93,7 +92,7 @@ export default function LeftBar({ leftBarStatus }) {
 
       {/* Accordion */}
       <div className="pl-8 pt-3 text-sm">
-      <Accordion type="multiple"  className="text-black/80 collapsible" >
+        <Accordion type="multiple" className="text-black/80 collapsible" >
           {tabData.map((tab, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
               <AccordionTrigger className="font-semibold" onClick={() => openModal(tab.title, componentMap[tab.component])}>{tab.tabName}</AccordionTrigger>
