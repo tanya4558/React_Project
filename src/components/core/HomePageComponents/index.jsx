@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 
 import L from "leaflet"
-import "leaflet/dist/leaflet.css" 
+import "leaflet/dist/leaflet.css"
 //import forecastingLocations from '@/data/forecastingLocations.json'
 
 //import { ShapeFile } from 'ShapeFile';
@@ -41,12 +41,12 @@ export default function ContentBar({
   //         dashArray: '3',
   //         fillOpacity: 0.7
   //   };
-  
+
   //   // if (hoveredCountry && feature.properties.iso_a3 === hoveredCountry.iso_a3) {
   //   //           mapStyle.color = '#444';
   //   //           mapStyle.weight = 2;
   //   // }
-  
+
   //   return mapStyle;
   // };
 
@@ -63,14 +63,12 @@ export default function ContentBar({
   // };
 
 
- 
+
   return (
     <div
-      className={`relative ${!leftBarStatus && "w-[calc(100vw-650px+300px)]"} ${
-        !rightBarStatus && "w-[calc(100vw-650px+350px)]"
-      } ${
-        !leftBarStatus && !rightBarStatus && "w-screen"
-      } w-[calc(100vw-650px)] h-[calc(100vh-134px)] overflow-y-auto overflow-hidden`}
+      className={`relative ${!leftBarStatus && "w-[calc(100vw-650px+300px)]"} ${!rightBarStatus && "w-[calc(100vw-650px+350px)]"
+        } ${!leftBarStatus && !rightBarStatus && "w-screen"
+        } w-[calc(100vw-650px)] h-[calc(100vh-134px)] overflow-y-auto overflow-hidden`}
     >
       {/* <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3627771.3933752966!2d80.36868693152962!3d27.383662455453962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399f21d52693d311%3A0x4d7299c262866519!2sGanges!5e0!3m2!1sen!2sin!4v1695900164721!5m2!1sen!2sin"
@@ -87,20 +85,20 @@ export default function ContentBar({
       { <Map/> }
 
       </div> */}
-      <Map/>
+      <Map />
       {/* Minimize Left Panel */}
       <div className="minimize-panel"
         title={leftBarStatus ? "Collapse" : "Expand"}
         onClick={() => setLeftBarOpen(!leftBarStatus)}
-        
+
       >
         <ChevronLeft className={`rotate-${leftBarStatus ? 0 : 180}`} size={20} strokeWidth={3} />
       </div>
 
       {/* Minimize Right Panel */}
       <div className={`minimize-panel right-panel`} title={rightBarStatus ? "Collapse" : "Expand"} onClick={() => setRightBarOpen(!rightBarStatus)}>
-    <ChevronRight className={`rotate-${rightBarStatus ? 0 : 180}`} size={20} strokeWidth={3} />
-  </div>
+        <ChevronRight className={`rotate-${rightBarStatus ? 0 : 180}`} size={20} strokeWidth={3} />
+      </div>
 
       <h1 className="font-semibold px-4 pt-4 text-lg">{`Flood Impact Area(>40% inundation): `}</h1>
 
@@ -149,7 +147,7 @@ export default function ContentBar({
               })}
           </TableBody>
         </Table>
-        
+
       </div>
       <style jsx>{`
   .map-container {
@@ -190,7 +188,7 @@ export default function ContentBar({
   }
 `}</style>
     </div>
-    
+
   );
 }
 
