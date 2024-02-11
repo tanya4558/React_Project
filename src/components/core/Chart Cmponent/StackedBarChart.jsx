@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,6 +15,7 @@ import XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 // import faker from 'faker';
 import { faker } from '@faker-js/faker';
+import { canvas } from 'leaflet';
 
 ChartJS.register(
   CategoryScale,
@@ -61,6 +62,21 @@ export const options = {
       },
     },
   },
+  legend: {
+    onClick: (e, legendItem) => {
+      const index = legendItem.datasetIndex;
+      const chart = chartRef.current.chartInstance;
+
+      chart.data.datasets[index].hidden = !chart.data.datasets[index].hidden;
+      chart.update();
+    },
+  },
+  tooltips: {
+    mode: 'index', // Set to 'index' to show tooltips for all datasets at the same index
+    intersect: false,
+  },
+  onElementsClick: (event, elements) => handleElementsClick(elements),
+
 };
 
 const labels = ['2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01', '2022-05-01', '2022-06-01', '2022-07-01'];
@@ -72,21 +88,21 @@ export const data = {
       label: 'Dataset 1',
       data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
       borderColor: 'rgb(255, 99, 132)',
-      borderWidth: 2,
+      borderWidth: 1,
       fill: false,
     },
     {
       label: 'Dataset 2',
       data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
       borderColor: 'rgb(75, 192, 192)',
-      borderWidth: 2,
+      borderWidth: 1,
       fill: false,
     },
     {
       label: 'Dataset 3',
       data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
       borderColor: 'rgb(53, 162, 235)',
-      borderWidth: 2,
+      borderWidth: 1,
       fill: false,
     },
   ],
@@ -95,8 +111,9 @@ export const data = {
 
 export function StackedBarChart() {
   const chartRef = useRef();
+  const [hiddenDatasets, setHiddenDatasets] = useState([]);
   const [exportFormat, setExportFormat] = useState(null);
-  const [showDropdown, setShowDropdown] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
   const exportChart = async () => {
     if (!exportFormat) return;
     const chartContainer = chartRef.current;
@@ -134,8 +151,13 @@ export function StackedBarChart() {
     } catch (error) {
       console.error('Error exporting chart:', error);
     }
-   // setExportFormat(null);
+    setExportFormat(null);
   };
+  const exportPDF = (canvas) => {
+    const pdf = new jsPDF();
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0);
+    pdf.save('chart.pdf');
+  }
 
   const downloadImage = (dataUrl, filename) => {
     const link = document.createElement('a');
@@ -199,21 +221,52 @@ export function StackedBarChart() {
     const buf = new ArrayBuffer(s.length);
     const view = new Uint8Array(buf);
   }
+  useEffect(() => {
+    // Ensure that the chartRef has a current property and it has been initialized
+    if (chartRef.current && chartRef.current.chartInstance) {
+      const chartInstance = chartRef.current.chartInstance;
+      const chartData = chartInstance.data;
+    }
+  }, [chartRef]);
+  const handleElementsClick = (elements) => {
+    if (elements.length > 0) {
+      const datasetIndex = elements[0]._datasetIndex;
+
+      setHiddenDatasets((prevHiddenDatasets) => {
+        const updatedHiddenDatasets = [...prevHiddenDatasets];
+        updatedHiddenDatasets[datasetIndex] = !updatedHiddenDatasets[datasetIndex];
+        return updatedHiddenDatasets;
+      });
+    }
+  };
   return (
-    <div style={{ position: 'relative' }}>
-      {/* Set width for the entire container */}
-      <Line options={options} data={data} ref={chartRef} style={{ position: 'relative' }} />
-      <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 1000 }}>
-        <button onClick={() => setShowDropdown(!showDropdown)}>Export</button>
-        <div className="dropdown" style={{ display: showDropdown ? 'block' : 'none' }}>
-          <div onClick={() => setExportFormat('png')}>Download PNG</div>
-          <div onClick={() => setExportFormat('jpeg')}>Download JPEG</div>
-          <div onClick={() => setExportFormat('pdf')}>Download PDF</div>
-          <div onClick={() => setExportFormat('svg')}>Download SVG</div>
-          <div onClick={() => setExportFormat('csv')}>Download CSV</div>
-          <div onClick={() => setExportFormat('xls')}>Download XLS</div>
+    <div style={{ position: 'relative', height: '600px' }}>
+      <div style={{ position: 'absolute', top: '200px', right: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {data.datasets.map((dataset, index) => (
+            <div
+              key={index}
+              style={{ display: 'flex', alignItems: 'center', marginBottom: '5px', cursor: 'pointer' }}
+              onClick={() => setHiddenDatasets((prevHiddenDatasets) => {
+                const updatedHiddenDatasets = [...prevHiddenDatasets];
+                updatedHiddenDatasets[index] = !updatedHiddenDatasets[index];
+                return updatedHiddenDatasets;
+              })}
+            >
+              <div style={{ width: '10px', height: '10px', backgroundColor: dataset.borderColor, marginRight: '5px' }} />
+              <span>{dataset.label}</span>
+            </div>
+          ))}
         </div>
-        <button onClick={exportChart}></button>
+      </div>
+      <div style={{ width: '100%', height: '200px', marginTop: '20px' }}>
+        <Line data={{
+          ...data,
+          datasets: data.datasets.map((dataset, index) => ({
+            ...dataset,
+            hidden: hiddenDatasets[index],
+          })),
+        }} options={options} />
       </div>
     </div>
   );
